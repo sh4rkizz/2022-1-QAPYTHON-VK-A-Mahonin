@@ -1,7 +1,7 @@
 import string
 
 import random
-from UI.locators import basic_locators
+from homework1.UI.locators import basic_locators
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as exp_cond
