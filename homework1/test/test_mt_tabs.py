@@ -22,15 +22,15 @@ class TestExample(BaseCase):
             pytest.param(
                 'Аудитории',
                 [
-                        'https://target.my.com/segments/segments_list',
-                        'https://target.my.com/segments'
+                    'https://target.my.com/segments/segments_list',
+                    'https://target.my.com/segments'
                 ]
             ),
             pytest.param(
                 'Профиль',
                 [
-                        'https://target.my.com/profile/contacts',
-                        'https://target.my.com/profile'
+                    'https://target.my.com/profile/contacts',
+                    'https://target.my.com/profile'
                 ]
             )
         ]

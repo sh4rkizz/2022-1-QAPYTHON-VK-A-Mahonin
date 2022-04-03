@@ -1,17 +1,17 @@
 from selenium.webdriver.common.by import By
 
-LOGIN = (By.XPATH, '//*[contains(@class, "responseHead-module-button") and contains(text(), "Войти")]')
+LOGIN = (By.XPATH, '//*[contains(@class, "responseHead-module-button")]')
 
 EMAIL = (By.NAME, 'email')
 PASSWORD = (By.NAME, 'password')
 
-LOGIN_SUBMIT = (By.XPATH, '//*[contains(@class, "authForm-module-button") and contains(text(), "Войти")]')
+LOGIN_SUBMIT = (By.XPATH, '//*[contains(@class, "authForm-module-button")]')
 
 BUTTON_MENU = (By.XPATH, '//*[contains(@class, "center-module-buttonsWrap")]')
 
 MIGRATION_BUTTON = {
-    'Аудитории': (By.XPATH, '//ul[contains(@class, "center-module-buttonsWrap")]/li/a[contains(text(),\'Аудитории\')]'),
-    'Профиль': (By.XPATH, '//ul[contains(@class, "center-module-buttonsWrap")]/li/a[contains(text(),\'Профиль\')]')
+    'Аудитории': (By.XPATH, '//*[contains(@class, "center-module") and contains(@href, "/segments")]'),
+    'Профиль': (By.XPATH, '//*[contains(@class, "center-module") and contains(@href, "/profile")]')
 }
 
 PROFILE = (By.XPATH, '//*[contains(@class, "center-module") and contains(@href, "/profile")]')
@@ -25,5 +25,5 @@ PROFILE_FULLNAME = (By.XPATH, '//div[contains(@data-name, "fio")]//input')
 PROFILE_PHONE = (By.XPATH, '//div[contains(@data-name, "phone")]//input')
 PROFILE_ADD_EMAIL_BUTTON = (By.XPATH, '//div[contains(@class, "clickable-button__container")]')
 PROFILE_EMAIL = (By.XPATH, '//div[contains(@class, "js-additional-email profile")]//input')
-PROFILE_SAVE = (By.XPATH, '//div[@class = "button__text" and contains(text(), "Сохранить")]')
+PROFILE_SAVE = (By.XPATH, '//div[@class = "button__text"]')
 PROFILE_EDIT_RESPONSE = (By.XPATH, '//div[contains(@cid, "view") and contains(@class, "_notification")]')

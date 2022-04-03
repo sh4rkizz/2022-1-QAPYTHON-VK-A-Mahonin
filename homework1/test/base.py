@@ -1,14 +1,12 @@
 import string
 
 import random
-from homework1.UI.locators import basic_locators
+from UI.locators import basic_locators
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as exp_cond
 from selenium.common.exceptions import StaleElementReferenceException, \
-    ElementClickInterceptedException, \
-    TimeoutException
-
+    ElementClickInterceptedException
 import pytest
 
 CLICK_RETRY = 5
@@ -30,24 +28,26 @@ class BaseCase:
         self.click(basic_locators.MIGRATION_BUTTON[button])
         self.wait().until(exp_cond.url_changes)
 
+    @staticmethod
+    def _generate_name(alphabet, length: int = 10):
+        return ''.join([random.choice(alphabet) for _ in range(length)])
+
     def profile_edit(self):
         self.click(basic_locators.PROFILE)
         self.wait().until(exp_cond.presence_of_element_located(basic_locators.PROFILE_FULLNAME))
 
-        generator = lambda alphabet, s: ''.join([random.choice(alphabet) for _ in range(random.randint(s[0], s[1]))])
-
         self.insert(
             basic_locators.PROFILE_FULLNAME,
-            ' '.join([generator(string.ascii_lowercase, [4, 9]) for _ in range(3)])
+            ' '.join([self._generate_name(string.ascii_lowercase) for _ in range(3)])
         )
         self.insert(
             basic_locators.PROFILE_PHONE,
-            f'8{generator("1234567890", [10, 10])}'
+            f'8{self._generate_name("1234567890")}'
         )
         self.click(basic_locators.PROFILE_ADD_EMAIL_BUTTON)
         self.insert(
             basic_locators.PROFILE_EMAIL,
-            f'{generator(string.ascii_lowercase, [4, 15])}@mail.ru'
+            f'{self._generate_name(string.ascii_lowercase)}@mail.ru'
         )
         self.click(basic_locators.PROFILE_SAVE)
         notification = self.wait().until(exp_cond.visibility_of_any_elements_located(
@@ -85,8 +85,6 @@ class BaseCase:
                 self.find(locator, timeout)
                 self.wait(timeout).until(exp_cond.element_to_be_clickable(locator)).click()
                 return
-            except TimeoutException:
-                self.driver.refresh()
             except (StaleElementReferenceException, ElementClickInterceptedException):
                 if i == CLICK_RETRY - 1:
                     raise
