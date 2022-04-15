@@ -1,0 +1,2 @@
+#!/bin/bash
+cat access.log | grep -Eo '(GET|POST|PUT|HEAD) ' | awk '{print $1}' | sort | uniq -c | sort -nr | awk '{print $2 "->" $1}'

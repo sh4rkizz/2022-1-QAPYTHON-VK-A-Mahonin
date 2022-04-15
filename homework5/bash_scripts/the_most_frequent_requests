@@ -1,0 +1,2 @@
+#!/bin/bash
+cat access.log | grep -Eo "[A-Z]{3,4}.+(HTTP)" | awk '{print $2}'| sort | uniq -c | sort -nr | head | awk '{print $1 "\t" $2}'

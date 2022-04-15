@@ -1,0 +1,5 @@
+Count all requests by type
+POST	102503
+GET	122096
+HEAD	528
+PUT	6
