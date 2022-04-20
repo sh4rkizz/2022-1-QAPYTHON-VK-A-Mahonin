@@ -9,7 +9,7 @@ def mysql_client() -> Client:
     client = Client(
         database='TEST_SQL',
         login='root',
-        password='1111'
+        password='pass'
     )
     client.connect()
     yield client
@@ -21,7 +21,7 @@ def pytest_configure(config):
         client = Client(
             database='TEST_SQL',
             login='root',
-            password='1111'
+            password='pass'
         )
 
         client.create_new_database()
