@@ -2,10 +2,12 @@ from selenium.webdriver.common.by import By
 
 
 class LoginPageLocators:
-    LOGIN = (By.XPATH, '//*[contains(@class, "responseHead-module-button") and contains(text(), "Войти")]')
+    LOGIN = (By.XPATH, '//*[contains(@class, "responseHead-module-button")]')
     EMAIL = (By.NAME, 'email')
     PASSWORD = (By.NAME, 'password')
-    LOGIN_SUBMIT = (By.XPATH, '//*[contains(@class, "authForm-module-button") and contains(text(), "Войти")]')
+    LOGIN_SUBMIT = (By.XPATH, '//*[contains(@class, "authForm-module-button")]')
+
+    ERROR_BANNER = (By.XPATH, '//div[@class="formMsg js_form_msg"]')
 
 
 class BasePageLocators:
@@ -15,34 +17,36 @@ class BasePageLocators:
 
 
 class MainPageLocators(BasePageLocators):
-    CREATE_CAMPAIGN = (By.XPATH, '//a[@href = "/campaign/new"]')
-    CREATE_NEW_CAMPAIGN = (
-        By.XPATH, '//div[contains(@class, "button-module-textWrapper") and contains(text(), "Создать кампанию")]'
-    )
-    INSTRUCTION = (By.XPATH, '//div[contains(@class,"instruction-module") and contains(text(), "С чего начать")]')
+    CREATE_CAMPAIGN = (By.XPATH, '//a[@href="/campaign/new"]')
+    CREATE_NEW_CAMPAIGN = (By.XPATH, '//div[contains(@class, "button-module-textWrapper")]')
     CREATED_CAMPAIGN = (By.XPATH, '//a[contains(@class, "nameCell-module-campaignName") and @title="{}"]')
-    SEGMENT_PAGE = (By.XPATH, '//a[@href = "/segments"]')
+    SEGMENT_PAGE = (By.XPATH, '//a[@href="/segments"]')
 
 
 class CampaignPageLocators(MainPageLocators):
     CAMPAIGN_TARGET = (By.XPATH, '//div[contains(@class, "column-list-item {}")]')
     INSERT_URL = (By.XPATH, '//input[@data-gtm-id="ad_url_text"]')
-    CAMPAIGN_NAME = (By.XPATH, '//div[contains(@class, "base-settings__campaign-name-wrap")]//input')
-    AD_FORMAT_BANNER = (By.XPATH, '//span[contains(text(), "Баннер")]')
+    CLEAR_CAMPAIGN_NAME = (By.XPATH, '//div[@class="input__clear js-input-clear"]')
+    CAMPAIGN_NAME = (By.XPATH, '//input[@data-translated-attr="placeholder"]')
+    AD_FORMAT_BANNER = (By.ID, 'patterns_banner_4')
     UPLOAD_IMAGE_BUTTON = (By.XPATH, '//div[contains(@class, "roles-module-buttonWrap")]/'
                                      'div[contains(@class, "upload-module-wrapper")]//input')
     SAVE_PHOTO = (By.XPATH, '//input[@class="image-cropper__save js-save"]')
-    SUBMIT_LOCATOR = (By.XPATH, '//button[@data-class-name="Submit"]/div[contains(text(), "Создать кампанию")]')
+    SUBMIT_LOCATOR = (By.XPATH, '//div[@class="footer__button js-save-button-wrap"]')
 
 
 class SegmentPageLocators(BasePageLocators):
     CREATE_SEGMENT = (By.XPATH, '//a[@href ="/segments/segments_list/new/"]')
     COUNT_SEGMENTS = (By.XPATH, '//a[@href="/segments/segments_list"]/span[contains(@class, "item-count")]')
     SEGMENT_CHECKBOX = (By.XPATH, '//input[@type="checkbox" and contains(@class, "adding-segments-source")]')
-    ADD_SEGMENT = (By.XPATH, '//div[@class="button__text" and contains(text(), "Добавить сегмент")]')
+    ADD_SEGMENT = (By.XPATH, '//div[@class="adding-segments-modal__btn-wrap js-add-button"]')
 
     SEGMENT_NAME = (By.XPATH, '//input[@maxlength="60" and contains(@class,"input__inp")]')
     CREATE_NEW_SEGMENT = (By.XPATH, '//button[@data-class-name="Submit"]')
     SEGMENT_LIST = (By.XPATH, '//a[contains(@href, "/segments/segments_list/") and @title="{}"]')
-    DELETE_SEGMENT = (By.XPATH, '//div[contains(@daa-test, "remove") and @data-row-id="{}"]')
-    SUBMIT_DELETION = (By.XPATH, '//div[@class="button__text" and contains(text(), "Удалить")]')
+
+    ROW = (By.XPATH, '//a[@title="{}"]')
+    ROW_TICK = (By.XPATH, '//*[contains(@data-test, "id-{}")]//input')
+
+    ACTIONS = (By.XPATH, '//*[@data-test="select" and contains(@class, "segmentsTable")]')
+    DELETE_SEGMENT = (By.XPATH, '//*[@data-id="remove"]')

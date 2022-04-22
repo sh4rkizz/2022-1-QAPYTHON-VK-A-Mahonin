@@ -1,4 +1,5 @@
-import allure
+from allure import step
+
 from selenium.common.exceptions import TimeoutException
 
 from UI.locators.basic_locators import MainPageLocators
@@ -11,18 +12,21 @@ class MainPage(BasePage):
     url = 'https://target.my.com/dashboard'
     locators = MainPageLocators()
 
-    @allure.step('Open campaign page')
+    @step('Open campaign page')
     def open_campaign(self) -> CampaignPage:
         try:
             locator = self.locators.CREATE_CAMPAIGN
             self.find(locator)
         except TimeoutException:
             locator = self.locators.CREATE_NEW_CAMPAIGN
+        finally:
+            self.logger.info('Migrating to the campaign creation page')
 
         self.click(locator)
         return CampaignPage(self.driver)
 
-    @allure.step('Open segment page')
+    @step('Open segment page')
     def open_segment(self) -> SegmentPage:
         self.click(self.locators.SEGMENT_PAGE)
+        self.logger.info('Migrating to the segment creation page')
         return SegmentPage(self.driver)

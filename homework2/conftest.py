@@ -1,4 +1,6 @@
 import logging
+
+from logging import Logger
 from UI.fixtures import *
 
 
@@ -34,7 +36,7 @@ def temp_dir(request):
 
 
 @pytest.fixture(scope='function')
-def logger(temp_dir, config):
+def logger(temp_dir, config) -> Logger:
     log_formatter = logging.Formatter('%(asctime)s - %(filename)s - %(levelname)s - %(message)s')
     log_file = os.path.join(temp_dir, 'test.log')
     log_level = logging.DEBUG if config['debug_log'] else logging.INFO

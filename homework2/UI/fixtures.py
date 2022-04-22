@@ -19,7 +19,7 @@ import pytest
 
 
 @pytest.fixture(scope='function')
-def driver(config, temp_dir):
+def driver(config, temp_dir, logger):
     browser = config['browser']
     url = config['url']
 
@@ -37,7 +37,10 @@ def driver(config, temp_dir):
         browser.maximize_window()
         browser.get(url)
     else:
+        logger.error(f'Usage of unsupported {browser=} detected')
         raise RuntimeError(f'Your browser {browser} is not supported right now. Sorry...')
+
+    logger.info(f'Browser {config["browser"]} is being used for https://target.my.com testing')
 
     yield browser
     browser.quit()
@@ -75,11 +78,10 @@ def ui_report(driver, request, temp_dir):
 
 @allure.step("Autologin")
 @pytest.fixture(scope='function')
-def autologin(driver, logger, login_page) -> MainPage:
+def autologin(driver, login_page) -> MainPage:
     email = 'ewe2002ewe@mail.ru'
     password = 'Qwerty123'
     login_page.login_user(email=email, password=password)
-    logger.info(f'Logged in with email: {email} and password: {password}')
     return MainPage(driver)
 
 

@@ -1,4 +1,4 @@
-import allure
+from allure import step
 
 from UI.locators.basic_locators import CampaignPageLocators
 from UI.pages.base_page import BasePage
@@ -8,37 +8,55 @@ class CampaignPage(BasePage):
     url = 'https://target.my.com/campaign/new'
     locators = CampaignPageLocators()
 
-    @allure.step('Campaign creation')
-    def create_campaign(self, photo_path, promotion_url='https://github.com/sh4rkizz', target='_traffic'):
-        # Choose the goal and insert link for promotion
+    @step('Create campaign')
+    def create_campaign(self, photo_path: str, campaign_name: str,
+                        promotion_url='https://github.com/sh4rkizz', target='_traffic'):
+        self.logger.info('Campaign creation has started')
         self.click(
             (
                 self.locators.CAMPAIGN_TARGET[0],
                 self.locators.CAMPAIGN_TARGET[1].format(target)
             )
         )
-        self.insert(self.locators.INSERT_URL, promotion_url)
+        self.logger.debug(f'Choosing the main target of the campaign: {target}')
 
-        # Get campaign name
-        campaign_name = self.find(self.locators.CAMPAIGN_NAME)
-        self.scroll_to(campaign_name)
-        campaign_name = campaign_name.get_attribute('value')
+        self.insert(
+            locator=self.locators.INSERT_URL,
+            text=promotion_url
+        )
+        self.logger.debug(f'Filling the {promotion_url}')
+        self.logger.debug(f'Locator {self.locators.INSERT_URL}')
 
-        # Choose AD format
-        self.scroll_to(self.find(self.locators.AD_FORMAT_BANNER))
+        self.scroll_to(
+            self.find(self.locators.CAMPAIGN_NAME)
+        )
+        self.click(self.locators.CLEAR_CAMPAIGN_NAME)
+        self.insert(
+            locator=self.locators.CAMPAIGN_NAME,
+            text=campaign_name,
+            is_clear=True
+        )
+        self.logger.debug(f'Naming future campaign: {campaign_name}')
+
+        self.scroll_to(
+            self.find(self.locators.AD_FORMAT_BANNER)
+        )
         self.click(self.locators.AD_FORMAT_BANNER)
+        self.logger.debug(f'Choosing AD format')
 
-        # Upload and save the logo
-        self.scroll_to(self.find(self.locators.UPLOAD_IMAGE_BUTTON))
+        self.scroll_to(
+            self.find(self.locators.UPLOAD_IMAGE_BUTTON)
+        )
         self.find(self.locators.UPLOAD_IMAGE_BUTTON).send_keys(photo_path)
         self.click(self.locators.SAVE_PHOTO)
+        self.logger.debug(f'Uploading a cute cat as a campaign logo')
 
-        # Create the campaign
         self.click(self.locators.SUBMIT_LOCATOR)
 
         created_campaign = (
             self.locators.CREATED_CAMPAIGN[0],
             self.locators.CREATED_CAMPAIGN[1].format(campaign_name)
         )
+        self.logger.info(f'Campaign by the name of {campaign_name} was successfully created')
 
         return campaign_name == self.find(created_campaign).text
