@@ -1,0 +1,6 @@
+Clients with the highest amount of failed requests (code 5xx)
+189.217.45.73	225
+82.193.127.15	4
+91.210.145.36	3
+194.87.237.6	2
+198.38.94.207	2

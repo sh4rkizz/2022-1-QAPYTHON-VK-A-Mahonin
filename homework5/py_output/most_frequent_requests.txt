@@ -1,0 +1,11 @@
+Top 10 most commonly requested urls
+103939	/administrator/index.php
+26336	/apache-log/access.log
+7682	/index.php
+6981	/
+4980	/templates/_system/css/general.css
+3199	/robots.txt
+2356	http://almhuette-raith.at/administrator/index.php
+2201	/favicon.ico
+1757	/wp-login.php
+1563	/administrator/
