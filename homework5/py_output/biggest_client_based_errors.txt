@@ -1,0 +1,6 @@
+Top 5 biggest client based errors (code 4xx)
+/index.php	404	1417	189.217.45.73
+/index.php	404	1417	189.217.45.73
+/index.php	404	1417	189.217.45.73
+/index.php	404	1417	189.217.45.73
+/index.php	404	1397	104.129.9.248
