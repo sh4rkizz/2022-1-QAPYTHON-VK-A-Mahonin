@@ -32,6 +32,7 @@ class TestMySQL(BaseMySQL):
         )
 
         assert len(table_content) == 1
+        assert table_content[0].quantity > 0
 
     def test_count_requests_by_type(self):
         line_counter = self.logbuilder.count_requests_by_type()
@@ -43,9 +44,10 @@ class TestMySQL(BaseMySQL):
         )
 
         assert len(table_content) == line_counter
+        assert table_content[0].type != ''
 
     def test_most_frequent_requests(self):
-        line_counter = self.logbuilder.count_most_frequent_requests()
+        line_counter = self.logbuilder.count_most_frequent_requests(length=10)
         table_content = (
             self.mysql
                 .session
@@ -54,9 +56,10 @@ class TestMySQL(BaseMySQL):
         )
 
         assert len(table_content) == line_counter
+        assert table_content[1].url != ''
 
     def test_biggest_client_based_errors(self):
-        line_counter = self.logbuilder.count_biggest_client_based_errors()
+        line_counter = self.logbuilder.count_biggest_client_based_errors(length=5)
         table_content = (
             self.mysql
                 .session
@@ -65,9 +68,10 @@ class TestMySQL(BaseMySQL):
         )
 
         assert len(table_content) == line_counter
+        assert table_content[4].id == 5
 
     def test_count_requests_with_server_error(self):
-        line_counter = self.logbuilder.count_requests_with_server_error()
+        line_counter = self.logbuilder.count_requests_with_server_error(length=5)
         table_content = (
             self.mysql
                 .session
@@ -76,3 +80,4 @@ class TestMySQL(BaseMySQL):
         )
 
         assert len(table_content) == line_counter
+        assert table_content[4].ip_address != ''

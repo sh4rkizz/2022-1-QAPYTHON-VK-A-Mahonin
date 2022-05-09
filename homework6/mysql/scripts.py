@@ -26,15 +26,10 @@ class LogBuilder:
 
     def count_requests_by_type(self) -> int:
         line_counter = 0
-        output = {
-            'POST': 0,
-            'GET': 0,
-            'HEAD': 0,
-            'PUT': 0
-        }
+        output = dict()
 
         regex = re.compile(
-            '(GET|POST|PUT|HEAD) .+$',
+            '\"([A-Z]{3,7}) .+$',
             re.MULTILINE
         )
 
@@ -42,7 +37,12 @@ class LogBuilder:
             matches = re.findall(regex, file.read())
 
         for match in matches:
-            output[f'{match.split()[0]}'] += 1
+            elem = f'{match}'
+
+            if output.get(elem) is None:
+                output.setdefault(elem, 0)
+
+            output[elem] += 1
 
         for line_counter, (request_type, quantity) in enumerate(output.items(), start=1):
             self.client.session.add(
@@ -54,13 +54,12 @@ class LogBuilder:
 
         return line_counter
 
-    def count_most_frequent_requests(self) -> int:
+    def count_most_frequent_requests(self, length=10) -> int:
         line_counter = 0
-        regex = re.compile(r'[A-Z]{3,4} .+$', re.MULTILINE)
+        regex = re.compile(r'[A-Z]{3,7} .+$', re.MULTILINE)
 
         with open(self.file_path, 'r') as file:
-            file = file.read()
-            requests = [match.split()[1] for match in re.findall(regex, file)]
+            requests = [match.split()[1].split('?')[0] for match in re.findall(regex, file.read())]
 
         requests.sort()
         output = list(
@@ -73,9 +72,9 @@ class LogBuilder:
         output.sort(key=lambda elem: elem[1], reverse=True)
         output = [
             {
-                'url': url,
-                'quantity': quantity
-            } for url, quantity in output[:10]
+                'quantity': quantity,
+                'url': url
+            } for url, quantity in output[:length]
         ]
 
         for line_counter, out_elem in enumerate(output, start=1):
@@ -88,26 +87,32 @@ class LogBuilder:
 
         return line_counter
 
-    def count_biggest_client_based_errors(self) -> int:
+    def count_biggest_client_based_errors(self, length=5) -> int:
         line_counter = 0
-        regex = re.compile(r'\d+\.\d+\.\d+\..+[A-Z]{3,4} .+HTTP.+" 4.. \d+', re.MULTILINE)
+        regex = re.compile(r'\d+\.\d+\.\d+\..+[A-Z]{3,7} .+HTTP.+" 4.. \d+', re.MULTILINE)
 
         with open(self.file_path, 'r') as file:
             output = [
                 {
-                    'url': match.split()[6],
+                    'url': match.split()[6].split('?')[0],
                     'status_code': match.split()[8],
                     'size': int(match.split()[9]),
                     'ip': match.split()[0],
-                } for match in re.findall(regex, file.read())
+                    'pos': enum,
+                } for enum, match in enumerate(re.findall(regex, file.read()))
             ]
 
-        output.sort(
-            key=lambda elem: elem.get('size'),
-            reverse=True
-        )
+        output = list(
+            sorted(
+                output,
+                key=lambda elem: (elem['size'], -elem['pos']),
+                reverse=True
+            )
+        )[:length]
 
-        output = output[:5]
+        for x in output:
+            x.pop('pos')
+
         for line_counter, out_elem in enumerate(output, start=1):
             self.client.session.add(
                 ClientBasedErrors(
@@ -120,9 +125,9 @@ class LogBuilder:
 
         return line_counter
 
-    def count_requests_with_server_error(self) -> int:
+    def count_requests_with_server_error(self, length=5) -> int:
         line_counter = 0
-        regex = re.compile(r'\d+\.\d+\.\d+\..+[A-Z]{3,4} .+HTTP.+" 5.. \d+.+$', re.MULTILINE)
+        regex = re.compile(r'\d+\.\d+\.\d+\..+[A-Z]{3,7} .+HTTP.+" 5.. \d+.+$', re.MULTILINE)
 
         with open(self.file_path, 'r') as file:
             ip = [match.split()[0] for match in re.findall(regex, file.read())]
@@ -143,7 +148,7 @@ class LogBuilder:
             {
                 'ip_address': ip_address,
                 'quantity': quantity
-            } for ip_address, quantity in output[:5]
+            } for ip_address, quantity in output[:length]
         ]
 
         for line_counter, out_elem in enumerate(output, start=1):
