@@ -6,3 +6,5 @@ allure-pytest~=2.9.45
 requests~=2.27.1
 flask~=2.1.1
 Faker~=13.6.0
+pymysql~=1.0.2
+sqlalchemy~=1.4.35
